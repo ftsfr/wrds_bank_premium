@@ -1,0 +1,73 @@
+[config]
+type = "pipeline"
+chartbook_format_version = "0.0.2"
+
+[site]
+title = "WRDS Bank Regulatory Premium"
+author = "Jeremy Bejarano"
+copyright = "2025"
+logo_path = ""
+favicon_path = ""
+
+[pipeline]
+id = "wrds_bank_premium"
+pipeline_name = "WRDS Bank Regulatory Premium"
+pipeline_description = "WRDS Bank Regulatory Premium database tables including call reports, CRSP linkage, and LEI data"
+lead_pipeline_developer = "Jeremy Bejarano"
+contributors = ["Jeremy Bejarano"]
+runs_on = "Windows/Linux/MacOS (WRDS required)"
+git_repo_URL = "https://github.com/ftsfr/wrds_bank_premium"
+README_file_path = "./README.md"
+
+[notebooks]
+
+[notebooks.summary_wrds_bank_premium]
+notebook_name = "summary_wrds_bank_premium"
+notebook_description = "Summary of WRDS Bank Regulatory Premium tables"
+notebook_path = "_output/_notebook_build/summary_wrds_bank_premium_ipynb.ipynb"
+is_publishable = true
+
+[charts]
+
+[dataframes]
+
+[dataframes.ftsfr_bank_total_assets]
+dataframe_name = "ftsfr_bank_total_assets"
+short_description_df = "Bank total assets time series from call reports"
+data_sources = ["WRDS Bank Regulatory Premium"]
+data_providers = ["WRDS"]
+need_to_contact_provider = ["no"]
+data_on_pre_approved_list = ["No"]
+links_to_data_providers = ["https://wrds-www.wharton.upenn.edu"]
+topic_tags = ["banks", "regulatory", "call reports", "total assets"]
+type_of_data_access = ["WRDS"]
+data_license = "WRDS"
+license_expiration_date = ""
+provider_contact_info = ""
+restriction_on_use = "No"
+how_is_pulled = "WRDS Bank Regulatory Premium database"
+path_to_parquet_data = "./_data/ftsfr_bank_total_assets.parquet"
+path_to_excel_data = ""
+date_col = "ds"
+dataframe_docs_str = """
+## Bank Total Assets
+
+Time series of bank total assets from WRDS Call Report Research data.
+
+### Columns
+
+| Column | Description |
+|--------|-------------|
+| unique_id | Bank RSSD ID |
+| ds | Date |
+| y | Total assets (bhck2170, in thousands) |
+
+### Source Tables
+
+This pipeline also provides access to:
+- wrds_struct_rel_ultimate: Ultimate parent structure
+- wrds_call_research: Full call report data
+- wrds_bank_crsp_link: Bank to CRSP linkage
+- idrssd_to_lei: RSSD to LEI mapping
+- lei_main: Legal Entity Identifier data
+"""
