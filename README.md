@@ -38,3 +38,17 @@ This pipeline pulls key tables from the WRDS Bank Regulatory Premium database, w
 1. Configure WRDS credentials in `~/.pgpass`
 2. Install dependencies: `pip install -r requirements.txt`
 3. Run pipeline: `doit`
+
+## Academic References
+
+### Primary Paper
+
+- **Drechsler, Savov, and Schnabl (2017)** - "The Deposits Channel of Monetary Policy"
+  - Quarterly Journal of Economics
+  - Uses bank regulatory data to study monetary policy transmission
+
+### Key Applications
+
+- Bank balance sheet analysis
+- Regulatory capital studies
+- LEI data for entity resolution across datasets

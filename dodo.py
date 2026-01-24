@@ -82,12 +82,12 @@ def task_format():
 def task_run_notebooks():
     """Execute summary notebooks."""
     notebook_py = BASE_DIR / "src" / "summary_wrds_bank_premium_ipynb.py"
-    notebook_ipynb = OUTPUT_DIR / "_notebook_build" / "summary_wrds_bank_premium_ipynb.ipynb"
+    notebook_ipynb = OUTPUT_DIR / "summary_wrds_bank_premium_ipynb.ipynb"
 
     actions = [
         f'ipynb-py-convert "{notebook_py}" "{notebook_ipynb}"',
         jupyter_execute_notebook(notebook_ipynb),
-        jupyter_to_html(notebook_ipynb, OUTPUT_DIR / "_notebook_build"),
+        jupyter_to_html(notebook_ipynb, OUTPUT_DIR),
     ]
 
     return {
@@ -98,7 +98,7 @@ def task_run_notebooks():
         ],
         "targets": [
             notebook_ipynb,
-            OUTPUT_DIR / "_notebook_build" / "summary_wrds_bank_premium_ipynb.html",
+            OUTPUT_DIR / "summary_wrds_bank_premium_ipynb.html",
         ],
         "verbosity": 2,
         "task_dep": ["format"],
@@ -111,7 +111,7 @@ def task_generate_pipeline_site():
         "actions": ["chartbook build -f"],
         "file_dep": [
             "chartbook.toml",
-            OUTPUT_DIR / "_notebook_build" / "summary_wrds_bank_premium_ipynb.ipynb",
+            OUTPUT_DIR / "summary_wrds_bank_premium_ipynb.ipynb",
         ],
         "targets": [BASE_DIR / "docs" / "index.html"],
         "verbosity": 2,

@@ -24,10 +24,32 @@ README_file_path = "./README.md"
 [notebooks.summary_wrds_bank_premium]
 notebook_name = "summary_wrds_bank_premium"
 notebook_description = "Summary of WRDS Bank Regulatory Premium tables"
-notebook_path = "_output/_notebook_build/summary_wrds_bank_premium_ipynb.ipynb"
+notebook_path = "_output/summary_wrds_bank_premium_ipynb.ipynb"
 is_publishable = true
 
 [charts]
+
+[charts.bank_total_assets_replication]
+chart_name = "Bank Total Assets"
+short_description_chart = "Bank total assets time series from regulatory call reports"
+dataframe_id = "ftsfr_bank_total_assets"
+path_to_html_chart = "./_output/bank_total_assets_replication.html"
+path_to_excel_chart = ""
+topic_tags = ["banks", "regulatory", "total assets", "replication"]
+past_publications = ["Drechsler, Savov, and Schnabl (2017) - The Deposits Channel of Monetary Policy"]
+chart_docs_str = """
+## Bank Total Assets
+
+Time series of bank total assets from WRDS Call Report Research data.
+
+### Data Source
+
+WRDS Bank Regulatory Premium database
+
+### Reference
+
+Drechsler, Savov, and Schnabl (2017)
+"""
 
 [dataframes]
 

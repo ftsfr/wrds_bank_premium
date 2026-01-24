@@ -1,0 +1,18 @@
+# Paper References for WRDS Bank Premium Module
+
+[Drechsler2017]
+title = "The Deposits Channel of Monetary Policy"
+authors = "Itamar Drechsler, Alexi Savov, and Philipp Schnabl"
+year = 2017
+journal = "Quarterly Journal of Economics"
+description = "The paper introduces the 'deposits channel' as a new mechanism through which monetary policy affects the economy through bank balance sheets."
+empirical_facts = [
+    "Deposit spreads increase with the Fed funds rate, leading to significant deposit outflows.",
+    "The effect of monetary policy on deposit spreads and outflows is stronger in concentrated markets.",
+    "Banks' ability to raise deposit spreads is a key measure of their exposure to monetary policy.",
+]
+lessons_learned = [
+    "Market power in deposit markets allows banks to widen spreads without losing deposits.",
+    "The deposits channel has significant implications for understanding the transmission of monetary policy through bank balance sheets.",
+]
+data_sources = ["WRDS Bank Regulatory Premium database", "Call Reports data"]
