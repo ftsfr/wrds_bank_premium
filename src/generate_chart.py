@@ -52,14 +52,7 @@ def generate_ew_quartile_chart():
 
     fig.update_layout(
         template="plotly_white",
-        hovermode="x unified",
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=1.02,
-            xanchor="right",
-            x=1
-        )
+        hovermode="x unified"
     )
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
@@ -97,14 +90,7 @@ def generate_vw_quartile_chart():
 
     fig.update_layout(
         template="plotly_white",
-        hovermode="x unified",
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=1.02,
-            xanchor="right",
-            x=1
-        )
+        hovermode="x unified"
     )
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
