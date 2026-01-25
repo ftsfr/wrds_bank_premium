@@ -29,18 +29,54 @@ is_publishable = true
 
 [charts]
 
-[charts.bank_total_assets_replication]
-chart_name = "Bank Total Assets"
-short_description_chart = "Bank total assets time series from regulatory call reports"
-dataframe_id = "ftsfr_bank_total_assets"
-path_to_html_chart = "./_output/bank_total_assets_replication.html"
+[charts.bank_total_assets_ew_quartile]
+chart_name = "Bank Total Assets by Size Quartile (Equal-Weight)"
+short_description_chart = "Average bank total assets by initial size quartile. Each quartile contains 25% of banks by count."
+dataframe_id = "ftsfr_bank_total_assets_ew_quartile"
+path_to_html_chart = "./_output/bank_total_assets_ew_quartile.html"
 path_to_excel_chart = ""
-topic_tags = ["banks", "regulatory", "total assets", "replication"]
+topic_tags = ["banks", "regulatory", "total assets", "aggregated"]
 past_publications = ["Drechsler, Savov, and Schnabl (2017) - The Deposits Channel of Monetary Policy"]
 chart_docs_str = """
-## Bank Total Assets
+## Bank Total Assets by Size Quartile (Equal-Weight)
 
-Time series of bank total assets from WRDS Call Report Research data.
+Average bank total assets by initial size quartile. Each quartile contains 25% of banks by count. Banks are sorted by their initial total assets (first observation) and tracked over time.
+
+### Quartiles
+
+- Q1: Smallest 25% of banks by count
+- Q2: Second smallest 25%
+- Q3: Second largest 25%
+- Q4: Largest 25% of banks by count
+
+### Data Source
+
+WRDS Bank Regulatory Premium database
+
+### Reference
+
+Drechsler, Savov, and Schnabl (2017)
+"""
+
+[charts.bank_total_assets_vw_quartile]
+chart_name = "Bank Total Assets by Size Quartile (Value-Weight)"
+short_description_chart = "Asset-weighted average by size quartile. Each quartile contains 25% of total banking assets."
+dataframe_id = "ftsfr_bank_total_assets_vw_quartile"
+path_to_html_chart = "./_output/bank_total_assets_vw_quartile.html"
+path_to_excel_chart = ""
+topic_tags = ["banks", "regulatory", "total assets", "aggregated"]
+past_publications = ["Drechsler, Savov, and Schnabl (2017) - The Deposits Channel of Monetary Policy"]
+chart_docs_str = """
+## Bank Total Assets by Size Quartile (Value-Weight)
+
+Asset-weighted average by size quartile. Each quartile contains 25% of total banking assets. Banks are sorted by their initial total assets (first observation) and tracked over time.
+
+### Quartiles
+
+- Q1: Banks comprising smallest 25% of total assets
+- Q2: Banks comprising next 25% of total assets
+- Q3: Banks comprising next 25% of total assets
+- Q4: Banks comprising largest 25% of total assets
 
 ### Data Source
 
@@ -92,4 +128,81 @@ This pipeline also provides access to:
 - wrds_bank_crsp_link: Bank to CRSP linkage
 - idrssd_to_lei: RSSD to LEI mapping
 - lei_main: Legal Entity Identifier data
+"""
+
+[dataframes.ftsfr_bank_total_assets_ew_quartile]
+dataframe_name = "ftsfr_bank_total_assets_ew_quartile"
+short_description_df = "Bank total assets aggregated by size quartile (equal-weight)"
+data_sources = ["WRDS Bank Regulatory Premium"]
+data_providers = ["WRDS"]
+need_to_contact_provider = ["no"]
+data_on_pre_approved_list = ["No"]
+links_to_data_providers = ["https://wrds-www.wharton.upenn.edu"]
+topic_tags = ["banks", "regulatory", "total assets", "aggregated"]
+type_of_data_access = ["WRDS"]
+data_license = "WRDS"
+license_expiration_date = ""
+provider_contact_info = ""
+restriction_on_use = "No"
+how_is_pulled = "Aggregated from WRDS Bank Regulatory Premium database"
+path_to_parquet_data = "./_data/ftsfr_bank_total_assets_ew_quartile.parquet"
+path_to_excel_data = ""
+date_col = "ds"
+dataframe_docs_str = """
+## Bank Total Assets by Size Quartile (Equal-Weight)
+
+Quarterly total assets aggregated by bank size quartile. Each quartile contains 25% of banks by count.
+
+### Columns
+
+| Column | Description |
+|--------|-------------|
+| unique_id | Quartile identifier (Q1_small_ew, Q2_ew, Q3_ew, Q4_large_ew) |
+| ds | Date |
+| y | Mean total assets (thousands) for quartile |
+
+### Notes
+
+- Banks are sorted by initial total assets (first observation)
+- Equal-weight: simple mean of total assets within each quartile
+- Q1 = smallest banks, Q4 = largest banks
+"""
+
+[dataframes.ftsfr_bank_total_assets_vw_quartile]
+dataframe_name = "ftsfr_bank_total_assets_vw_quartile"
+short_description_df = "Bank total assets aggregated by size quartile (value-weight)"
+data_sources = ["WRDS Bank Regulatory Premium"]
+data_providers = ["WRDS"]
+need_to_contact_provider = ["no"]
+data_on_pre_approved_list = ["No"]
+links_to_data_providers = ["https://wrds-www.wharton.upenn.edu"]
+topic_tags = ["banks", "regulatory", "total assets", "aggregated"]
+type_of_data_access = ["WRDS"]
+data_license = "WRDS"
+license_expiration_date = ""
+provider_contact_info = ""
+restriction_on_use = "No"
+how_is_pulled = "Aggregated from WRDS Bank Regulatory Premium database"
+path_to_parquet_data = "./_data/ftsfr_bank_total_assets_vw_quartile.parquet"
+path_to_excel_data = ""
+date_col = "ds"
+dataframe_docs_str = """
+## Bank Total Assets by Size Quartile (Value-Weight)
+
+Quarterly total assets aggregated by bank size quartile. Each quartile contains 25% of total banking assets.
+
+### Columns
+
+| Column | Description |
+|--------|-------------|
+| unique_id | Quartile identifier (Q1_small_vw, Q2_vw, Q3_vw, Q4_large_vw) |
+| ds | Date |
+| y | Asset-weighted mean total assets (thousands) for quartile |
+
+### Notes
+
+- Banks are sorted by initial total assets (first observation)
+- Value-weight: asset-weighted mean of total assets within each quartile
+- Q1 = smallest banks (by cumulative assets), Q4 = largest banks
+- Shows where system-wide assets concentrate
 """

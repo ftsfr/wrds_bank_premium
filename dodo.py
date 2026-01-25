@@ -79,6 +79,41 @@ def task_format():
     }
 
 
+def task_aggregate():
+    """Create aggregated total assets datasets by size quartiles."""
+    return {
+        "actions": ["python src/create_aggregated_assets.py"],
+        "file_dep": [
+            "src/create_aggregated_assets.py",
+            DATA_DIR / "ftsfr_bank_total_assets.parquet",
+        ],
+        "targets": [
+            DATA_DIR / "ftsfr_bank_total_assets_ew_quartile.parquet",
+            DATA_DIR / "ftsfr_bank_total_assets_vw_quartile.parquet",
+        ],
+        "verbosity": 2,
+        "task_dep": ["format"],
+    }
+
+
+def task_generate_charts():
+    """Generate aggregated total assets charts."""
+    return {
+        "actions": ["python src/generate_chart.py"],
+        "file_dep": [
+            "src/generate_chart.py",
+            DATA_DIR / "ftsfr_bank_total_assets_ew_quartile.parquet",
+            DATA_DIR / "ftsfr_bank_total_assets_vw_quartile.parquet",
+        ],
+        "targets": [
+            OUTPUT_DIR / "bank_total_assets_ew_quartile.html",
+            OUTPUT_DIR / "bank_total_assets_vw_quartile.html",
+        ],
+        "verbosity": 2,
+        "task_dep": ["aggregate"],
+    }
+
+
 def task_run_notebooks():
     """Execute summary notebooks."""
     notebook_py = BASE_DIR / "src" / "summary_wrds_bank_premium_ipynb.py"
@@ -112,8 +147,10 @@ def task_generate_pipeline_site():
         "file_dep": [
             "chartbook.toml",
             OUTPUT_DIR / "summary_wrds_bank_premium_ipynb.ipynb",
+            OUTPUT_DIR / "bank_total_assets_ew_quartile.html",
+            OUTPUT_DIR / "bank_total_assets_vw_quartile.html",
         ],
         "targets": [BASE_DIR / "docs" / "index.html"],
         "verbosity": 2,
-        "task_dep": ["run_notebooks"],
+        "task_dep": ["run_notebooks", "generate_charts"],
     }
