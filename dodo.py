@@ -4,6 +4,7 @@ Doit build file for WRDS Bank Regulatory Premium pipeline.
 Run with: doit
 """
 
+import os
 import platform
 import sys
 from pathlib import Path
@@ -18,29 +19,38 @@ OUTPUT_DIR = BASE_DIR / "_output"
 OS_TYPE = "nix" if platform.system() != "Windows" else "windows"
 
 
-def jupyter_execute_notebook(notebook):
-    """Execute a Jupyter notebook and save output."""
-    return (
-        f"jupyter nbconvert --execute --to notebook "
-        f'--ClearMetadataPreprocessor.enabled=True --inplace "{notebook}"'
-    )
+
+## Helpers for handling Jupyter Notebook tasks
+os.environ["PYDEVD_DISABLE_FILE_VALIDATION"] = "1"
 
 
-def jupyter_to_html(notebook, output_dir):
-    """Convert notebook to HTML."""
-    return (
-        f'jupyter nbconvert --to html --output-dir="{output_dir}" "{notebook}"'
-    )
+# fmt: off
+def jupyter_execute_notebook(notebook_path):
+    return f"jupyter nbconvert --execute --to notebook --ClearMetadataPreprocessor.enabled=True --inplace {notebook_path}"
+def jupyter_to_html(notebook_path, output_dir=OUTPUT_DIR):
+    return f"jupyter nbconvert --to html --output-dir={output_dir} {notebook_path}"
+# fmt: on
+
+
+def mv(from_path, to_path):
+    from_path = Path(from_path)
+    to_path = Path(to_path)
+    to_path.mkdir(parents=True, exist_ok=True)
+    if OS_TYPE == "nix":
+        command = f"mv {from_path} {to_path}"
+    else:
+        command = f"move {from_path} {to_path}"
+    return command
 
 
 def task_config():
     """Create necessary directories."""
+    def create_dirs():
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     return {
-        "actions": [
-            f'mkdir -p "{DATA_DIR}"' if OS_TYPE == "nix" else f'if not exist "{DATA_DIR}" mkdir "{DATA_DIR}"',
-            f'mkdir -p "{OUTPUT_DIR}"' if OS_TYPE == "nix" else f'if not exist "{OUTPUT_DIR}" mkdir "{OUTPUT_DIR}"',
-            f'mkdir -p "{OUTPUT_DIR}/_notebook_build"' if OS_TYPE == "nix" else f'if not exist "{OUTPUT_DIR}/_notebook_build" mkdir "{OUTPUT_DIR}/_notebook_build"',
-        ],
+        "actions": [create_dirs],
+        "targets": [DATA_DIR, OUTPUT_DIR],
         "verbosity": 2,
     }
 
@@ -114,30 +124,44 @@ def task_generate_charts():
     }
 
 
-def task_run_notebooks():
-    """Execute summary notebooks."""
-    notebook_py = BASE_DIR / "src" / "summary_wrds_bank_premium_ipynb.py"
-    notebook_ipynb = OUTPUT_DIR / "summary_wrds_bank_premium_ipynb.ipynb"
-
-    actions = [
-        f'ipynb-py-convert "{notebook_py}" "{notebook_ipynb}"',
-        jupyter_execute_notebook(notebook_ipynb),
-        jupyter_to_html(notebook_ipynb, OUTPUT_DIR),
-    ]
-
-    return {
-        "actions": actions,
+notebook_tasks = {
+    "summary_wrds_bank_premium_ipynb": {
+        "path": "./src/summary_wrds_bank_premium_ipynb.py",
         "file_dep": [
-            notebook_py,
             DATA_DIR / "ftsfr_bank_total_assets.parquet",
         ],
-        "targets": [
-            notebook_ipynb,
-            OUTPUT_DIR / "summary_wrds_bank_premium_ipynb.html",
-        ],
-        "verbosity": 2,
-        "task_dep": ["format"],
-    }
+        "targets": [],
+    },
+}
+notebook_files = []
+for notebook in notebook_tasks.keys():
+    pyfile_path = Path(notebook_tasks[notebook]["path"])
+    notebook_files.append(pyfile_path)
+
+
+def task_run_notebooks():
+    """Execute summary notebooks."""
+    for notebook in notebook_tasks.keys():
+        pyfile_path = Path(notebook_tasks[notebook]["path"])
+        notebook_path = pyfile_path.with_suffix(".ipynb")
+        yield {
+            "name": notebook,
+            "actions": [
+                f"jupytext --to notebook --output {notebook_path} {pyfile_path}",
+                jupyter_execute_notebook(notebook_path),
+                jupyter_to_html(notebook_path),
+                mv(notebook_path, OUTPUT_DIR),
+            ],
+            "file_dep": [
+                pyfile_path,
+                *notebook_tasks[notebook]["file_dep"],
+            ],
+            "targets": [
+                OUTPUT_DIR / f"{notebook}.html",
+                *notebook_tasks[notebook]["targets"],
+            ],
+            "clean": True,
+        }
 
 
 def task_generate_pipeline_site():
@@ -146,7 +170,7 @@ def task_generate_pipeline_site():
         "actions": ["chartbook build -f"],
         "file_dep": [
             "chartbook.toml",
-            OUTPUT_DIR / "summary_wrds_bank_premium_ipynb.ipynb",
+            *notebook_files,
             OUTPUT_DIR / "bank_total_assets_ew_quartile.html",
             OUTPUT_DIR / "bank_total_assets_vw_quartile.html",
         ],
