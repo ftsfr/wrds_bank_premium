@@ -8,3 +8,5 @@ __pycache__/
 *.log
 .doit.db.db
 docs/
+_docs/
+_docs_src/
