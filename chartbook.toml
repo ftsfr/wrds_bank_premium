@@ -22,9 +22,15 @@ README_file_path = "./README.md"
 [notebooks]
 
 [notebooks.summary_wrds_bank_premium]
-notebook_name = "summary_wrds_bank_premium"
+notebook_name = "WRDS Bank Regulatory Premium Summary"
 notebook_description = "Summary of WRDS Bank Regulatory Premium tables"
-notebook_path = "_output/summary_wrds_bank_premium_ipynb.ipynb"
+notebook_path = "_output/01_summary_wrds_bank_premium.ipynb"
+is_publishable = true
+
+[notebooks.lcr_panel]
+notebook_name = "GSIB Liquidity Coverage Ratio (LCR) Proxy Panel"
+notebook_description = "GSIB Liquidity Coverage Ratio (LCR) proxy analysis"
+notebook_path = "_output/02_lcr_panel.ipynb"
 is_publishable = true
 
 [charts]
@@ -85,6 +91,32 @@ WRDS Bank Regulatory Premium database
 ### Reference
 
 Drechsler, Savov, and Schnabl (2017)
+"""
+
+[charts.gsib_lcr_proxy]
+chart_name = "GSIB Proxy Liquidity Coverage Ratio"
+short_description_chart = "Proxy LCR for 8 US GSIB holding companies derived from call report data"
+dataframe_id = "ftsfr_gsib_lcr_bhc_panel"
+path_to_html_chart = "./_output/gsib_lcr_proxy.html"
+path_to_excel_chart = ""
+topic_tags = ["banks", "regulatory", "LCR", "liquidity", "GSIB"]
+past_publications = []
+chart_docs_str = """
+## GSIB Proxy Liquidity Coverage Ratio
+
+Proxy LCR calculated from call report data for the 8 US GSIB holding companies.
+Components are summed across all subsidiary banks under each BHC before computing the ratio.
+
+### Methodology
+
+- Level 1 HQLA: cash + Treasury securities + US government obligations
+- Level 2A HQLA: agency MBS with 15% haircut, capped at 40% of total HQLA
+- Outflows: Basel III standard runoff rates applied to deposit and liability categories
+- LCR = Total HQLA / Total Net Cash Outflows (30-day)
+
+### Data Source
+
+WRDS Bank Regulatory Premium database (call reports)
 """
 
 [dataframes]
@@ -205,4 +237,148 @@ Quarterly total assets aggregated by bank size quartile. Each quartile contains 
 - Value-weight: asset-weighted mean of total assets within each quartile
 - Q1 = smallest banks (by cumulative assets), Q4 = largest banks
 - Shows where system-wide assets concentrate
+"""
+
+[dataframes.ftsfr_gsib_lcr_bhc_panel]
+dataframe_name = "ftsfr_gsib_lcr_bhc_panel"
+short_description_df = "GSIB proxy LCR time series at BHC level in FTSFR format"
+data_sources = ["WRDS Bank Regulatory Premium"]
+data_providers = ["WRDS"]
+need_to_contact_provider = ["no"]
+data_on_pre_approved_list = ["No"]
+links_to_data_providers = ["https://wrds-www.wharton.upenn.edu"]
+topic_tags = ["banks", "regulatory", "LCR", "liquidity", "GSIB"]
+type_of_data_access = ["WRDS"]
+data_license = "WRDS"
+license_expiration_date = ""
+provider_contact_info = ""
+restriction_on_use = "No"
+how_is_pulled = "Computed from WRDS Bank Regulatory Premium call report data"
+path_to_parquet_data = "./_data/ftsfr_gsib_lcr_bhc_panel.parquet"
+path_to_excel_data = ""
+date_col = "ds"
+dataframe_docs_str = """
+## GSIB Proxy LCR Panel (BHC Level)
+
+Quarterly proxy Liquidity Coverage Ratio for 8 US GSIB holding companies.
+Components are aggregated across all subsidiary banks under each BHC.
+
+### Columns
+
+| Column | Description |
+|--------|-------------|
+| unique_id | BHC short name (e.g., JPMorgan Chase) |
+| ds | Quarter-end date |
+| y | Proxy LCR (percentage, e.g., 120.0 = 120%) |
+
+### Methodology
+
+LCR = HQLA / Net Cash Outflows (30-day).
+HQLA uses Level 1 (cash, Treasuries, US gov) + Level 2A (agency MBS, 15% haircut, 40% cap).
+Outflows use Basel III standard runoff rates on call report deposit and liability categories.
+"""
+
+[dataframes.ftsfr_gsib_lcr_bhc_components]
+dataframe_name = "ftsfr_gsib_lcr_bhc_components"
+short_description_df = "GSIB proxy LCR components with HQLA and outflow breakdown at BHC level"
+data_sources = ["WRDS Bank Regulatory Premium"]
+data_providers = ["WRDS"]
+need_to_contact_provider = ["no"]
+data_on_pre_approved_list = ["No"]
+links_to_data_providers = ["https://wrds-www.wharton.upenn.edu"]
+topic_tags = ["banks", "regulatory", "LCR", "liquidity", "GSIB", "HQLA"]
+type_of_data_access = ["WRDS"]
+data_license = "WRDS"
+license_expiration_date = ""
+provider_contact_info = ""
+restriction_on_use = "No"
+how_is_pulled = "Computed from WRDS Bank Regulatory Premium call report data"
+path_to_parquet_data = "./_data/ftsfr_gsib_lcr_bhc_components.parquet"
+path_to_excel_data = ""
+date_col = "date"
+dataframe_docs_str = """
+## GSIB Proxy LCR Components (BHC Level)
+
+Wide-format panel with HQLA and outflow component breakdown aggregated at the BHC level.
+
+### Key Columns
+
+| Column | Description |
+|--------|-------------|
+| bhc_name | BHC short name |
+| date | Quarter-end date |
+| level1_hqla | Level 1 HQLA (cash + Treasuries + US gov) |
+| level2a_capped | Level 2A after 15% haircut and 40% cap |
+| total_hqla | Total HQLA |
+| total_net_outflows | Total net cash outflows |
+| proxy_lcr | Proxy LCR (percentage) |
+"""
+
+[dataframes.ftsfr_gsib_lcr_bank_panel]
+dataframe_name = "ftsfr_gsib_lcr_bank_panel"
+short_description_df = "GSIB proxy LCR time series at subsidiary bank level in FTSFR format"
+data_sources = ["WRDS Bank Regulatory Premium"]
+data_providers = ["WRDS"]
+need_to_contact_provider = ["no"]
+data_on_pre_approved_list = ["No"]
+links_to_data_providers = ["https://wrds-www.wharton.upenn.edu"]
+topic_tags = ["banks", "regulatory", "LCR", "liquidity", "GSIB"]
+type_of_data_access = ["WRDS"]
+data_license = "WRDS"
+license_expiration_date = ""
+provider_contact_info = ""
+restriction_on_use = "No"
+how_is_pulled = "Computed from WRDS Bank Regulatory Premium call report data"
+path_to_parquet_data = "./_data/ftsfr_gsib_lcr_bank_panel.parquet"
+path_to_excel_data = ""
+date_col = "ds"
+dataframe_docs_str = """
+## GSIB Proxy LCR Panel (Bank Level)
+
+Quarterly proxy LCR for individual GSIB subsidiary banks.
+
+### Columns
+
+| Column | Description |
+|--------|-------------|
+| unique_id | Bank name |
+| ds | Quarter-end date |
+| y | Proxy LCR (percentage) |
+"""
+
+[dataframes.ftsfr_gsib_lcr_bank_components]
+dataframe_name = "ftsfr_gsib_lcr_bank_components"
+short_description_df = "GSIB proxy LCR components at subsidiary bank level"
+data_sources = ["WRDS Bank Regulatory Premium"]
+data_providers = ["WRDS"]
+need_to_contact_provider = ["no"]
+data_on_pre_approved_list = ["No"]
+links_to_data_providers = ["https://wrds-www.wharton.upenn.edu"]
+topic_tags = ["banks", "regulatory", "LCR", "liquidity", "GSIB", "HQLA"]
+type_of_data_access = ["WRDS"]
+data_license = "WRDS"
+license_expiration_date = ""
+provider_contact_info = ""
+restriction_on_use = "No"
+how_is_pulled = "Computed from WRDS Bank Regulatory Premium call report data"
+path_to_parquet_data = "./_data/ftsfr_gsib_lcr_bank_components.parquet"
+path_to_excel_data = ""
+date_col = "date"
+dataframe_docs_str = """
+## GSIB Proxy LCR Components (Bank Level)
+
+Wide-format panel with HQLA and outflow component breakdown for individual subsidiary banks.
+
+### Key Columns
+
+| Column | Description |
+|--------|-------------|
+| rssd9001 | Bank RSSD ID |
+| bank_name | Bank name |
+| date | Quarter-end date |
+| level1_hqla | Level 1 HQLA |
+| level2a_capped | Level 2A capped |
+| total_hqla | Total HQLA |
+| total_net_outflows | Total net cash outflows |
+| proxy_lcr | Proxy LCR (percentage) |
 """

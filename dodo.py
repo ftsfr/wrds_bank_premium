@@ -106,6 +106,25 @@ def task_aggregate():
     }
 
 
+def task_lcr_panel():
+    """Create GSIB LCR proxy panel."""
+    return {
+        "actions": ["python src/create_lcr_panel.py"],
+        "file_dep": [
+            "src/create_lcr_panel.py",
+            DATA_DIR / "wrds_call_research.parquet",
+        ],
+        "targets": [
+            DATA_DIR / "ftsfr_gsib_lcr_bank_panel.parquet",
+            DATA_DIR / "ftsfr_gsib_lcr_bhc_panel.parquet",
+            DATA_DIR / "ftsfr_gsib_lcr_bank_components.parquet",
+            DATA_DIR / "ftsfr_gsib_lcr_bhc_components.parquet",
+        ],
+        "verbosity": 2,
+        "task_dep": ["pull"],
+    }
+
+
 def task_generate_charts():
     """Generate aggregated total assets charts."""
     return {
@@ -124,11 +143,35 @@ def task_generate_charts():
     }
 
 
+def task_generate_lcr_chart():
+    """Generate GSIB LCR proxy chart."""
+    return {
+        "actions": ["python src/generate_lcr_chart.py"],
+        "file_dep": [
+            "src/generate_lcr_chart.py",
+            DATA_DIR / "ftsfr_gsib_lcr_bhc_panel.parquet",
+        ],
+        "targets": [OUTPUT_DIR / "gsib_lcr_proxy.html"],
+        "verbosity": 2,
+        "task_dep": ["lcr_panel"],
+    }
+
+
 notebook_tasks = {
-    "summary_wrds_bank_premium_ipynb": {
-        "path": "./src/summary_wrds_bank_premium_ipynb.py",
+    "01_summary_wrds_bank_premium": {
+        "path": "./src/01_summary_wrds_bank_premium.ipynb.py",
         "file_dep": [
             DATA_DIR / "ftsfr_bank_total_assets.parquet",
+        ],
+        "targets": [],
+    },
+    "02_lcr_panel": {
+        "path": "./src/02_lcr_panel.ipynb.py",
+        "file_dep": [
+            DATA_DIR / "ftsfr_gsib_lcr_bank_panel.parquet",
+            DATA_DIR / "ftsfr_gsib_lcr_bhc_panel.parquet",
+            DATA_DIR / "ftsfr_gsib_lcr_bank_components.parquet",
+            DATA_DIR / "ftsfr_gsib_lcr_bhc_components.parquet",
         ],
         "targets": [],
     },
@@ -143,7 +186,8 @@ def task_run_notebooks():
     """Execute summary notebooks."""
     for notebook in notebook_tasks.keys():
         pyfile_path = Path(notebook_tasks[notebook]["path"])
-        notebook_path = pyfile_path.with_suffix(".ipynb")
+        notebook_path = pyfile_path.with_suffix("")  # strips .py, leaves .ipynb
+        notebook_name = notebook_path.stem
         yield {
             "name": notebook,
             "actions": [
@@ -157,7 +201,7 @@ def task_run_notebooks():
                 *notebook_tasks[notebook]["file_dep"],
             ],
             "targets": [
-                OUTPUT_DIR / f"{notebook}.html",
+                OUTPUT_DIR / f"{notebook_name}.html",
                 *notebook_tasks[notebook]["targets"],
             ],
             "clean": True,
@@ -173,8 +217,9 @@ def task_generate_pipeline_site():
             *notebook_files,
             OUTPUT_DIR / "bank_total_assets_ew_quartile.html",
             OUTPUT_DIR / "bank_total_assets_vw_quartile.html",
+            OUTPUT_DIR / "gsib_lcr_proxy.html",
         ],
         "targets": [BASE_DIR / "docs" / "index.html"],
         "verbosity": 2,
-        "task_dep": ["run_notebooks", "generate_charts"],
+        "task_dep": ["run_notebooks", "generate_charts", "generate_lcr_chart"],
     }
