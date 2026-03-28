@@ -1,0 +1,21 @@
+bhc_name,date,reported_lcr_pct
+JPMorgan Chase,2024-03-31,113
+JPMorgan Chase,2024-06-30,113
+JPMorgan Chase,2024-09-30,113
+JPMorgan Chase,2024-12-31,113
+Bank of America,2024-03-31,113
+Bank of America,2024-06-30,113
+Bank of America,2024-09-30,115
+Bank of America,2024-12-31,113
+Citigroup,2024-03-31,117
+Citigroup,2024-12-31,116
+Wells Fargo,2024-03-31,126
+Wells Fargo,2024-06-30,124
+Wells Fargo,2024-09-30,127
+Wells Fargo,2024-12-31,125
+Goldman Sachs,2024-12-31,126
+BNY Mellon,2024-03-31,117
+BNY Mellon,2024-06-30,115
+BNY Mellon,2024-12-31,115
+State Street,2024-03-31,107
+State Street,2024-06-30,106
