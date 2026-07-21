@@ -1,145 +1,60 @@
-[config]
-type = "pipeline"
-chartbook_format_version = "0.0.2"
-
-[site]
-title = "WRDS Bank Regulatory Premium"
-author = "Jeremy Bejarano"
+[project]
+name = "WRDS Bank Regulatory Premium"
+description = "WRDS Bank Regulatory Premium database tables including call reports, CRSP linkage, and LEI data"
+contributors = [
+    "Jeremy Bejarano",
+]
+repo_url = "https://github.com/ftsfr/wrds_bank_premium"
 copyright = "2025"
-logo_path = ""
-favicon_path = ""
-
-[pipeline]
-id = "wrds_bank_premium"
-pipeline_name = "WRDS Bank Regulatory Premium"
-pipeline_description = "WRDS Bank Regulatory Premium database tables including call reports, CRSP linkage, and LEI data"
-lead_pipeline_developer = "Jeremy Bejarano"
-contributors = ["Jeremy Bejarano"]
-runs_on = "Windows/Linux/MacOS (WRDS required)"
-git_repo_URL = "https://github.com/ftsfr/wrds_bank_premium"
-README_file_path = "./README.md"
-
-[notebooks]
+os_compatibility = [
+    "Windows/Linux/MacOS (WRDS required)",
+]
 
 [notebooks.summary_wrds_bank_premium]
-notebook_name = "WRDS Bank Regulatory Premium Summary"
-notebook_description = "Summary of WRDS Bank Regulatory Premium tables"
-notebook_path = "_output/01_summary_wrds_bank_premium.ipynb"
-is_publishable = true
+name = "WRDS Bank Regulatory Premium Summary"
+description = "Summary of WRDS Bank Regulatory Premium tables"
+path = "_output/01_summary_wrds_bank_premium.ipynb"
+publishable = true
 
 [notebooks.lcr_panel]
-notebook_name = "GSIB Liquidity Coverage Ratio (LCR) Proxy Panel"
-notebook_description = "GSIB Liquidity Coverage Ratio (LCR) proxy analysis"
-notebook_path = "_output/02_lcr_panel.ipynb"
-is_publishable = true
-
-[charts]
-
-[charts.bank_total_assets_ew_quartile]
-chart_name = "Bank Total Assets by Size Quartile (Equal-Weight)"
-short_description_chart = "Average bank total assets by initial size quartile. Each quartile contains 25% of banks by count."
-dataframe_id = "ftsfr_bank_total_assets_ew_quartile"
-path_to_html_chart = "./_output/bank_total_assets_ew_quartile.html"
-path_to_excel_chart = ""
-topic_tags = ["banks", "regulatory", "total assets", "aggregated"]
-past_publications = ["Drechsler, Savov, and Schnabl (2017) - The Deposits Channel of Monetary Policy"]
-chart_docs_str = """
-## Bank Total Assets by Size Quartile (Equal-Weight)
-
-Average bank total assets by initial size quartile. Each quartile contains 25% of banks by count. Banks are sorted by their initial total assets (first observation) and tracked over time.
-
-### Quartiles
-
-- Q1: Smallest 25% of banks by count
-- Q2: Second smallest 25%
-- Q3: Second largest 25%
-- Q4: Largest 25% of banks by count
-
-### Data Source
-
-WRDS Bank Regulatory Premium database
-
-### Reference
-
-Drechsler, Savov, and Schnabl (2017)
-"""
-
-[charts.bank_total_assets_vw_quartile]
-chart_name = "Bank Total Assets by Size Quartile (Value-Weight)"
-short_description_chart = "Asset-weighted average by size quartile. Each quartile contains 25% of total banking assets."
-dataframe_id = "ftsfr_bank_total_assets_vw_quartile"
-path_to_html_chart = "./_output/bank_total_assets_vw_quartile.html"
-path_to_excel_chart = ""
-topic_tags = ["banks", "regulatory", "total assets", "aggregated"]
-past_publications = ["Drechsler, Savov, and Schnabl (2017) - The Deposits Channel of Monetary Policy"]
-chart_docs_str = """
-## Bank Total Assets by Size Quartile (Value-Weight)
-
-Asset-weighted average by size quartile. Each quartile contains 25% of total banking assets. Banks are sorted by their initial total assets (first observation) and tracked over time.
-
-### Quartiles
-
-- Q1: Banks comprising smallest 25% of total assets
-- Q2: Banks comprising next 25% of total assets
-- Q3: Banks comprising next 25% of total assets
-- Q4: Banks comprising largest 25% of total assets
-
-### Data Source
-
-WRDS Bank Regulatory Premium database
-
-### Reference
-
-Drechsler, Savov, and Schnabl (2017)
-"""
-
-[charts.gsib_lcr_proxy]
-chart_name = "GSIB Proxy Liquidity Coverage Ratio"
-short_description_chart = "Proxy LCR for 8 US GSIB holding companies derived from call report data"
-dataframe_id = "ftsfr_gsib_lcr_bhc_panel"
-path_to_html_chart = "./_output/gsib_lcr_proxy.html"
-path_to_excel_chart = ""
-topic_tags = ["banks", "regulatory", "LCR", "liquidity", "GSIB"]
-past_publications = []
-chart_docs_str = """
-## GSIB Proxy Liquidity Coverage Ratio
-
-Proxy LCR calculated from call report data for the 8 US GSIB holding companies.
-Components are summed across all subsidiary banks under each BHC before computing the ratio.
-
-### Methodology
-
-- Level 1 HQLA: cash + Treasury securities + US government obligations
-- Level 2A HQLA: agency MBS with 15% haircut, capped at 40% of total HQLA
-- Outflows: Basel III standard runoff rates applied to deposit and liability categories
-- LCR = Total HQLA / Total Net Cash Outflows (30-day)
-
-### Data Source
-
-WRDS Bank Regulatory Premium database (call reports)
-"""
-
-[dataframes]
+name = "GSIB Liquidity Coverage Ratio (LCR) Proxy Panel"
+description = "GSIB Liquidity Coverage Ratio (LCR) proxy analysis"
+path = "_output/02_lcr_panel.ipynb"
+publishable = true
 
 [dataframes.ftsfr_bank_total_assets]
-dataframe_name = "ftsfr_bank_total_assets"
-short_description_df = "Bank total assets time series from call reports"
-data_sources = ["WRDS Bank Regulatory Premium"]
-data_providers = ["WRDS"]
-need_to_contact_provider = ["no"]
-data_on_pre_approved_list = ["No"]
-links_to_data_providers = ["https://wrds-www.wharton.upenn.edu"]
-topic_tags = ["banks", "regulatory", "call reports", "total assets"]
-type_of_data_access = ["WRDS"]
-data_license = "WRDS"
-license_expiration_date = ""
-provider_contact_info = ""
-restriction_on_use = "No"
-how_is_pulled = "WRDS Bank Regulatory Premium database"
-path_to_parquet_data = "./_data/ftsfr_bank_total_assets.parquet"
-path_to_excel_data = ""
+name = "ftsfr_bank_total_assets"
+description = "Bank total assets time series from call reports"
+sources = [
+    "WRDS Bank Regulatory Premium",
+]
+providers = [
+    "WRDS",
+]
+contact_required = [
+    "no",
+]
+pre_approved = [
+    "No",
+]
+provider_links = [
+    "https://wrds-www.wharton.upenn.edu",
+]
+tags = [
+    "banks",
+    "regulatory",
+    "call reports",
+    "total assets",
+]
+access_types = [
+    "WRDS",
+]
+license = "WRDS"
+restrictions = "No"
+pull_method = "WRDS Bank Regulatory Premium database"
+path = "./_data/ftsfr_bank_total_assets.parquet"
 date_col = "ds"
-dataframe_docs_str = """
+docs = """
 ## Bank Total Assets
 
 Time series of bank total assets from WRDS Call Report Research data.
@@ -163,24 +78,38 @@ This pipeline also provides access to:
 """
 
 [dataframes.ftsfr_bank_total_assets_ew_quartile]
-dataframe_name = "ftsfr_bank_total_assets_ew_quartile"
-short_description_df = "Bank total assets aggregated by size quartile (equal-weight)"
-data_sources = ["WRDS Bank Regulatory Premium"]
-data_providers = ["WRDS"]
-need_to_contact_provider = ["no"]
-data_on_pre_approved_list = ["No"]
-links_to_data_providers = ["https://wrds-www.wharton.upenn.edu"]
-topic_tags = ["banks", "regulatory", "total assets", "aggregated"]
-type_of_data_access = ["WRDS"]
-data_license = "WRDS"
-license_expiration_date = ""
-provider_contact_info = ""
-restriction_on_use = "No"
-how_is_pulled = "Aggregated from WRDS Bank Regulatory Premium database"
-path_to_parquet_data = "./_data/ftsfr_bank_total_assets_ew_quartile.parquet"
-path_to_excel_data = ""
+name = "ftsfr_bank_total_assets_ew_quartile"
+description = "Bank total assets aggregated by size quartile (equal-weight)"
+sources = [
+    "WRDS Bank Regulatory Premium",
+]
+providers = [
+    "WRDS",
+]
+contact_required = [
+    "no",
+]
+pre_approved = [
+    "No",
+]
+provider_links = [
+    "https://wrds-www.wharton.upenn.edu",
+]
+tags = [
+    "banks",
+    "regulatory",
+    "total assets",
+    "aggregated",
+]
+access_types = [
+    "WRDS",
+]
+license = "WRDS"
+restrictions = "No"
+pull_method = "Aggregated from WRDS Bank Regulatory Premium database"
+path = "./_data/ftsfr_bank_total_assets_ew_quartile.parquet"
 date_col = "ds"
-dataframe_docs_str = """
+docs = """
 ## Bank Total Assets by Size Quartile (Equal-Weight)
 
 Quarterly total assets aggregated by bank size quartile. Each quartile contains 25% of banks by count.
@@ -201,24 +130,38 @@ Quarterly total assets aggregated by bank size quartile. Each quartile contains 
 """
 
 [dataframes.ftsfr_bank_total_assets_vw_quartile]
-dataframe_name = "ftsfr_bank_total_assets_vw_quartile"
-short_description_df = "Bank total assets aggregated by size quartile (value-weight)"
-data_sources = ["WRDS Bank Regulatory Premium"]
-data_providers = ["WRDS"]
-need_to_contact_provider = ["no"]
-data_on_pre_approved_list = ["No"]
-links_to_data_providers = ["https://wrds-www.wharton.upenn.edu"]
-topic_tags = ["banks", "regulatory", "total assets", "aggregated"]
-type_of_data_access = ["WRDS"]
-data_license = "WRDS"
-license_expiration_date = ""
-provider_contact_info = ""
-restriction_on_use = "No"
-how_is_pulled = "Aggregated from WRDS Bank Regulatory Premium database"
-path_to_parquet_data = "./_data/ftsfr_bank_total_assets_vw_quartile.parquet"
-path_to_excel_data = ""
+name = "ftsfr_bank_total_assets_vw_quartile"
+description = "Bank total assets aggregated by size quartile (value-weight)"
+sources = [
+    "WRDS Bank Regulatory Premium",
+]
+providers = [
+    "WRDS",
+]
+contact_required = [
+    "no",
+]
+pre_approved = [
+    "No",
+]
+provider_links = [
+    "https://wrds-www.wharton.upenn.edu",
+]
+tags = [
+    "banks",
+    "regulatory",
+    "total assets",
+    "aggregated",
+]
+access_types = [
+    "WRDS",
+]
+license = "WRDS"
+restrictions = "No"
+pull_method = "Aggregated from WRDS Bank Regulatory Premium database"
+path = "./_data/ftsfr_bank_total_assets_vw_quartile.parquet"
 date_col = "ds"
-dataframe_docs_str = """
+docs = """
 ## Bank Total Assets by Size Quartile (Value-Weight)
 
 Quarterly total assets aggregated by bank size quartile. Each quartile contains 25% of total banking assets.
@@ -240,24 +183,39 @@ Quarterly total assets aggregated by bank size quartile. Each quartile contains 
 """
 
 [dataframes.ftsfr_gsib_lcr_bhc_panel]
-dataframe_name = "ftsfr_gsib_lcr_bhc_panel"
-short_description_df = "GSIB proxy LCR time series at BHC level in FTSFR format"
-data_sources = ["WRDS Bank Regulatory Premium"]
-data_providers = ["WRDS"]
-need_to_contact_provider = ["no"]
-data_on_pre_approved_list = ["No"]
-links_to_data_providers = ["https://wrds-www.wharton.upenn.edu"]
-topic_tags = ["banks", "regulatory", "LCR", "liquidity", "GSIB"]
-type_of_data_access = ["WRDS"]
-data_license = "WRDS"
-license_expiration_date = ""
-provider_contact_info = ""
-restriction_on_use = "No"
-how_is_pulled = "Computed from WRDS Bank Regulatory Premium call report data"
-path_to_parquet_data = "./_data/ftsfr_gsib_lcr_bhc_panel.parquet"
-path_to_excel_data = ""
+name = "ftsfr_gsib_lcr_bhc_panel"
+description = "GSIB proxy LCR time series at BHC level in FTSFR format"
+sources = [
+    "WRDS Bank Regulatory Premium",
+]
+providers = [
+    "WRDS",
+]
+contact_required = [
+    "no",
+]
+pre_approved = [
+    "No",
+]
+provider_links = [
+    "https://wrds-www.wharton.upenn.edu",
+]
+tags = [
+    "banks",
+    "regulatory",
+    "LCR",
+    "liquidity",
+    "GSIB",
+]
+access_types = [
+    "WRDS",
+]
+license = "WRDS"
+restrictions = "No"
+pull_method = "Computed from WRDS Bank Regulatory Premium call report data"
+path = "./_data/ftsfr_gsib_lcr_bhc_panel.parquet"
 date_col = "ds"
-dataframe_docs_str = """
+docs = """
 ## GSIB Proxy LCR Panel (BHC Level)
 
 Quarterly proxy Liquidity Coverage Ratio for 8 US GSIB holding companies.
@@ -279,24 +237,40 @@ Outflows use Basel III standard runoff rates on call report deposit and liabilit
 """
 
 [dataframes.ftsfr_gsib_lcr_bhc_components]
-dataframe_name = "ftsfr_gsib_lcr_bhc_components"
-short_description_df = "GSIB proxy LCR components with HQLA and outflow breakdown at BHC level"
-data_sources = ["WRDS Bank Regulatory Premium"]
-data_providers = ["WRDS"]
-need_to_contact_provider = ["no"]
-data_on_pre_approved_list = ["No"]
-links_to_data_providers = ["https://wrds-www.wharton.upenn.edu"]
-topic_tags = ["banks", "regulatory", "LCR", "liquidity", "GSIB", "HQLA"]
-type_of_data_access = ["WRDS"]
-data_license = "WRDS"
-license_expiration_date = ""
-provider_contact_info = ""
-restriction_on_use = "No"
-how_is_pulled = "Computed from WRDS Bank Regulatory Premium call report data"
-path_to_parquet_data = "./_data/ftsfr_gsib_lcr_bhc_components.parquet"
-path_to_excel_data = ""
+name = "ftsfr_gsib_lcr_bhc_components"
+description = "GSIB proxy LCR components with HQLA and outflow breakdown at BHC level"
+sources = [
+    "WRDS Bank Regulatory Premium",
+]
+providers = [
+    "WRDS",
+]
+contact_required = [
+    "no",
+]
+pre_approved = [
+    "No",
+]
+provider_links = [
+    "https://wrds-www.wharton.upenn.edu",
+]
+tags = [
+    "banks",
+    "regulatory",
+    "LCR",
+    "liquidity",
+    "GSIB",
+    "HQLA",
+]
+access_types = [
+    "WRDS",
+]
+license = "WRDS"
+restrictions = "No"
+pull_method = "Computed from WRDS Bank Regulatory Premium call report data"
+path = "./_data/ftsfr_gsib_lcr_bhc_components.parquet"
 date_col = "date"
-dataframe_docs_str = """
+docs = """
 ## GSIB Proxy LCR Components (BHC Level)
 
 Wide-format panel with HQLA and outflow component breakdown aggregated at the BHC level.
@@ -315,24 +289,39 @@ Wide-format panel with HQLA and outflow component breakdown aggregated at the BH
 """
 
 [dataframes.ftsfr_gsib_lcr_bank_panel]
-dataframe_name = "ftsfr_gsib_lcr_bank_panel"
-short_description_df = "GSIB proxy LCR time series at subsidiary bank level in FTSFR format"
-data_sources = ["WRDS Bank Regulatory Premium"]
-data_providers = ["WRDS"]
-need_to_contact_provider = ["no"]
-data_on_pre_approved_list = ["No"]
-links_to_data_providers = ["https://wrds-www.wharton.upenn.edu"]
-topic_tags = ["banks", "regulatory", "LCR", "liquidity", "GSIB"]
-type_of_data_access = ["WRDS"]
-data_license = "WRDS"
-license_expiration_date = ""
-provider_contact_info = ""
-restriction_on_use = "No"
-how_is_pulled = "Computed from WRDS Bank Regulatory Premium call report data"
-path_to_parquet_data = "./_data/ftsfr_gsib_lcr_bank_panel.parquet"
-path_to_excel_data = ""
+name = "ftsfr_gsib_lcr_bank_panel"
+description = "GSIB proxy LCR time series at subsidiary bank level in FTSFR format"
+sources = [
+    "WRDS Bank Regulatory Premium",
+]
+providers = [
+    "WRDS",
+]
+contact_required = [
+    "no",
+]
+pre_approved = [
+    "No",
+]
+provider_links = [
+    "https://wrds-www.wharton.upenn.edu",
+]
+tags = [
+    "banks",
+    "regulatory",
+    "LCR",
+    "liquidity",
+    "GSIB",
+]
+access_types = [
+    "WRDS",
+]
+license = "WRDS"
+restrictions = "No"
+pull_method = "Computed from WRDS Bank Regulatory Premium call report data"
+path = "./_data/ftsfr_gsib_lcr_bank_panel.parquet"
 date_col = "ds"
-dataframe_docs_str = """
+docs = """
 ## GSIB Proxy LCR Panel (Bank Level)
 
 Quarterly proxy LCR for individual GSIB subsidiary banks.
@@ -347,24 +336,40 @@ Quarterly proxy LCR for individual GSIB subsidiary banks.
 """
 
 [dataframes.ftsfr_gsib_lcr_bank_components]
-dataframe_name = "ftsfr_gsib_lcr_bank_components"
-short_description_df = "GSIB proxy LCR components at subsidiary bank level"
-data_sources = ["WRDS Bank Regulatory Premium"]
-data_providers = ["WRDS"]
-need_to_contact_provider = ["no"]
-data_on_pre_approved_list = ["No"]
-links_to_data_providers = ["https://wrds-www.wharton.upenn.edu"]
-topic_tags = ["banks", "regulatory", "LCR", "liquidity", "GSIB", "HQLA"]
-type_of_data_access = ["WRDS"]
-data_license = "WRDS"
-license_expiration_date = ""
-provider_contact_info = ""
-restriction_on_use = "No"
-how_is_pulled = "Computed from WRDS Bank Regulatory Premium call report data"
-path_to_parquet_data = "./_data/ftsfr_gsib_lcr_bank_components.parquet"
-path_to_excel_data = ""
+name = "ftsfr_gsib_lcr_bank_components"
+description = "GSIB proxy LCR components at subsidiary bank level"
+sources = [
+    "WRDS Bank Regulatory Premium",
+]
+providers = [
+    "WRDS",
+]
+contact_required = [
+    "no",
+]
+pre_approved = [
+    "No",
+]
+provider_links = [
+    "https://wrds-www.wharton.upenn.edu",
+]
+tags = [
+    "banks",
+    "regulatory",
+    "LCR",
+    "liquidity",
+    "GSIB",
+    "HQLA",
+]
+access_types = [
+    "WRDS",
+]
+license = "WRDS"
+restrictions = "No"
+pull_method = "Computed from WRDS Bank Regulatory Premium call report data"
+path = "./_data/ftsfr_gsib_lcr_bank_components.parquet"
 date_col = "date"
-dataframe_docs_str = """
+docs = """
 ## GSIB Proxy LCR Components (Bank Level)
 
 Wide-format panel with HQLA and outflow component breakdown for individual subsidiary banks.
@@ -381,4 +386,104 @@ Wide-format panel with HQLA and outflow component breakdown for individual subsi
 | total_hqla | Total HQLA |
 | total_net_outflows | Total net cash outflows |
 | proxy_lcr | Proxy LCR (percentage) |
+"""
+
+[charts.bank_total_assets_ew_quartile]
+name = "Bank Total Assets by Size Quartile (Equal-Weight)"
+description = "Average bank total assets by initial size quartile. Each quartile contains 25% of banks by count."
+dataframe = "ftsfr_bank_total_assets_ew_quartile"
+path = "./_output/bank_total_assets_ew_quartile.html"
+tags = [
+    "banks",
+    "regulatory",
+    "total assets",
+    "aggregated",
+]
+publications = [
+    "Drechsler, Savov, and Schnabl (2017) - The Deposits Channel of Monetary Policy",
+]
+docs = """
+## Bank Total Assets by Size Quartile (Equal-Weight)
+
+Average bank total assets by initial size quartile. Each quartile contains 25% of banks by count. Banks are sorted by their initial total assets (first observation) and tracked over time.
+
+### Quartiles
+
+- Q1: Smallest 25% of banks by count
+- Q2: Second smallest 25%
+- Q3: Second largest 25%
+- Q4: Largest 25% of banks by count
+
+### Data Source
+
+WRDS Bank Regulatory Premium database
+
+### Reference
+
+Drechsler, Savov, and Schnabl (2017)
+"""
+
+[charts.bank_total_assets_vw_quartile]
+name = "Bank Total Assets by Size Quartile (Value-Weight)"
+description = "Asset-weighted average by size quartile. Each quartile contains 25% of total banking assets."
+dataframe = "ftsfr_bank_total_assets_vw_quartile"
+path = "./_output/bank_total_assets_vw_quartile.html"
+tags = [
+    "banks",
+    "regulatory",
+    "total assets",
+    "aggregated",
+]
+publications = [
+    "Drechsler, Savov, and Schnabl (2017) - The Deposits Channel of Monetary Policy",
+]
+docs = """
+## Bank Total Assets by Size Quartile (Value-Weight)
+
+Asset-weighted average by size quartile. Each quartile contains 25% of total banking assets. Banks are sorted by their initial total assets (first observation) and tracked over time.
+
+### Quartiles
+
+- Q1: Banks comprising smallest 25% of total assets
+- Q2: Banks comprising next 25% of total assets
+- Q3: Banks comprising next 25% of total assets
+- Q4: Banks comprising largest 25% of total assets
+
+### Data Source
+
+WRDS Bank Regulatory Premium database
+
+### Reference
+
+Drechsler, Savov, and Schnabl (2017)
+"""
+
+[charts.gsib_lcr_proxy]
+name = "GSIB Proxy Liquidity Coverage Ratio"
+description = "Proxy LCR for 8 US GSIB holding companies derived from call report data"
+dataframe = "ftsfr_gsib_lcr_bhc_panel"
+path = "./_output/gsib_lcr_proxy.html"
+tags = [
+    "banks",
+    "regulatory",
+    "LCR",
+    "liquidity",
+    "GSIB",
+]
+docs = """
+## GSIB Proxy Liquidity Coverage Ratio
+
+Proxy LCR calculated from call report data for the 8 US GSIB holding companies.
+Components are summed across all subsidiary banks under each BHC before computing the ratio.
+
+### Methodology
+
+- Level 1 HQLA: cash + Treasury securities + US government obligations
+- Level 2A HQLA: agency MBS with 15% haircut, capped at 40% of total HQLA
+- Outflows: Basel III standard runoff rates applied to deposit and liability categories
+- LCR = Total HQLA / Total Net Cash Outflows (30-day)
+
+### Data Source
+
+WRDS Bank Regulatory Premium database (call reports)
 """
